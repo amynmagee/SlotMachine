@@ -30,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
     public int count;
     public Handler handler;
     private int fruitLocation;
-    private TextView speedNum;
     private UpdateOne updateOne;
     private UpdateTwo updateTwo;
     private UpdateThree updateThree;
+    private int speedNum;
+    private int speedNumTwo;
+    private int speedNumThree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,30 +43,62 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         grid = findViewById(R.id.gridLayout);
         apple = getDrawable(R.drawable.apple);
-        cherry = getDrawable(R.drawable.apple);
-        pear = getDrawable(R.drawable.apple);
+        cherry = getDrawable(R.drawable.cherry);
+        pear = getDrawable(R.drawable.pear);
         score = findViewById(R.id.score);
         speed = findViewById(R.id.speedBar);
         stop = findViewById(R.id.stop);
         start = findViewById(R.id.start);
-        speedNum = findViewById(R.id.speed);
         imageViews = new ImageView[3];
         rand = new Random();
         count = 0;
+        speedNum = 100;
+        speedNumTwo = 120;
+        speedNumThree = 90;
         handler = new Handler();
-        fruitLocation = rand.nextInt(3);
+        updateOne = new UpdateOne();
+        updateTwo = new UpdateTwo();
+        updateThree = new UpdateThree();
         for ( int i = 0; i < 3; i++) {
             imageViews[i] = (ImageView) getLayoutInflater().inflate(R.layout.fruitview, null);
             imageViews[i].setMinimumWidth(350);
             imageViews[i].setMinimumHeight(350);
-            imageViews[i].setImageDrawable(apple);
+            imageViews[i].setImageDrawable(pear);
             grid.addView(imageViews[i]);
         }
         speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                speedNum.setText(progress + "");
-                handler.postDelayed(progress + 20);
+                if (progress == 1){
+                    speedNum = 90;
+                    speedNumTwo = 100;
+                    speedNumThree = 80;
+                }
+                else if (progress == 2){
+                    speedNum = 80;
+                    speedNumTwo = 90;
+                    speedNumThree = 70;
+                }
+                else if (progress == 3){
+                    speedNum = 70;
+                    speedNumTwo = 80;
+                    speedNumThree = 60;
+                }
+                else if (progress == 4){
+                    speedNum = 60;
+                    speedNumTwo = 70;
+                    speedNumThree = 50;
+                }
+                else if (progress == 5){
+                    speedNum = 50;
+                    speedNumTwo = 60;
+                    speedNumThree = 40;
+                }
+                else {
+                    speedNum = 100;
+                    speedNumTwo = 120;
+                    speedNumThree = 90;
+                }
             }
 
             @Override
@@ -81,75 +115,74 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start(View v){
-        handler.postDelayed(updateOne, 1000);
-        handler.postDelayed(updateTwo, 1000);
-        handler.postDelayed(updateThree, 1000);
+        handler.postDelayed(updateOne, speedNum);
+        handler.postDelayed(updateTwo, speedNumTwo);
+        handler.postDelayed(updateThree, speedNumThree);
 
     }
     public void stop(View v){
-        handler.postDelayed(updateOne, 0);
-        handler.postDelayed(updateTwo, 0);
-        handler.postDelayed(updateThree, 0);
-        if (imageViews == apple){
-            score.setText(score + "50");
+        handler.removeCallbacks(updateOne);
+        handler.removeCallbacks(updateTwo);
+        handler.removeCallbacks(updateThree);
+        if (imageViews[0].getDrawable() == imageViews[1].getDrawable() && imageViews[0].getDrawable() == imageViews[2].getDrawable()){
+           if (imageViews[0].getDrawable() == apple){
+               count = 50 + count;
+               score.setText(""+count);
+           }
+           else if (imageViews[0].getDrawable() == pear){
+               count = 10 + count;
+               score.setText(""+count);
+           }
+           else if (imageViews[0].getDrawable() == cherry){
+               count = 100 + count;
+               score.setText(""+count);
+           }
         }
-        else if (imageViews == pear){
-            score.setText(score + "10");
         }
-        else (imageViews == cherry){
-            score.setText(score + "100");
-        }
-    }
     private class UpdateOne implements Runnable {
         @Override
         public void run() {
-            imageViews[fruitLocation].setImageDrawable(null);
-            fruitLocation = rand.nextInt(3);
-            if (imageViews == apple){
-                imageViews[fruitLocation].setImageDrawable(pear);
+            if (imageViews[0].getDrawable() == apple){
+                imageViews[0].setImageDrawable(pear);
             }
-            else if (imageViews == pear){
-                imageViews[fruitLocation].setImageDrawable(cherry);
+            else if (imageViews[0].getDrawable() == pear){
+                imageViews[0].setImageDrawable(cherry);
             }
-            else (imageViews == cherry){
-                imageViews[fruitLocation].setImageDrawable(apple);
+            else {
+                imageViews[0].setImageDrawable(apple);
             }
-            handler.postDelayed(updateOne, 1000);
+            handler.postDelayed(updateOne, speedNum);
         }
 
     }
     private class UpdateTwo implements Runnable {
         @Override
         public void run() {
-            imageViews[fruitLocation].setImageDrawable(null);
-            fruitLocation = rand.nextInt(3);
-            if (imageViews == apple){
-                imageViews[fruitLocation].setImageDrawable(pear);
+            if (imageViews[1].getDrawable() == apple){
+                imageViews[1].setImageDrawable(pear);
             }
-            else if (imageViews == pear){
-                imageViews[fruitLocation].setImageDrawable(cherry);
+            else if (imageViews[1].getDrawable() == pear){
+                imageViews[1].setImageDrawable(cherry);
             }
-            else (imageViews == cherry){
-                imageViews[fruitLocation].setImageDrawable(apple);
+            else {
+                imageViews[1].setImageDrawable(apple);
             }
-            handler.postDelayed(updateTwo, 1000);
+            handler.postDelayed(updateTwo, speedNumTwo);
         }
     }
     private class UpdateThree implements Runnable {
         @Override
         public void run() {
-            imageViews[fruitLocation].setImageDrawable(null);
-            fruitLocation = rand.nextInt(3);
-            if (imageViews == apple){
-                imageViews[fruitLocation].setImageDrawable(pear);
+            if (imageViews[2].getDrawable() == apple){
+                imageViews[2].setImageDrawable(pear);
             }
-            else if (imageViews == pear){
-                imageViews[fruitLocation].setImageDrawable(cherry);
+            else if (imageViews[2].getDrawable() == pear){
+                imageViews[2].setImageDrawable(cherry);
             }
-            else (imageViews == cherry){
-                imageViews[fruitLocation].setImageDrawable(apple);
+            else {
+                imageViews[2].setImageDrawable(apple);
             }
-            handler.postDelayed(updateThree, 1000);
+            handler.postDelayed(updateThree, speedNumThree);
         }
 
     }
