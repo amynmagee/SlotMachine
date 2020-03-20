@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public int count;
     public Handler handler;
     private int fruitLocation;
+    private TextView speedNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +42,25 @@ public class MainActivity extends AppCompatActivity {
         score = findViewById(R.id.score);
         speed = findViewById(R.id.speedBar);
         stop = findViewById(R.id.stop);
+        speedNum = findViewById(R.id.speedNum);
         imageViews = new ImageView[3];
         rand = new Random();
         count = 0;
         handler = new Handler();
         fruitLocation = rand.nextInt(3);
-        for (int i = 0; i < 3; i++) {
+        for ( int i = 0; i < 3; i++) {
             imageViews[i] = (ImageView) getLayoutInflater().inflate(R.layout.fruitview, null);
-            imageViews[i].setMinimumWidth(270);
-            imageViews[i].setMinimumHeight(270);
+            imageViews[i].setMinimumWidth(350);
+            imageViews[i].setMinimumHeight(350);
             if (i == fruitLocation) imageViews[i].setImageDrawable(apple);
+            else if (i == fruitLocation) imageViews[i].setImageDrawable(pear);
+            else imageViews[i].setImageDrawable(cherry);
             grid.addView(imageViews[i]);
         }
         speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                speedNum.setText(progress + "");
             }
 
             @Override
@@ -73,6 +77,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopGo(View v){
+        if(stop.isActivated()){
+            fruitLocation = setImageviewDrawable(rand);
+        }
+        else{
+            if(fruitLocation = apple){
+                score = (count + "50");
+            }
+            if else(fruitLocation = pear){
+                score = (count + "10");
+            }
+            else{
+                score = (count + "100");
+            }
+        }
 
     }
 
