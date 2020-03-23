@@ -76,21 +76,7 @@ public class MainActivity extends AppCompatActivity {
             grid.addView(imageViews[i]);
         }
 
-        public void onPause(){
-            super.onPause();
-            handler.removeCallbacks(updateOne);
-            handler.removeCallbacks(updateTwo);
-            handler.removeCallbacks(updateThree);
-        }
 
-        public void onResume() {
-            super.onResume();
-            if(on){
-                handler.postDelayed(updateOne,  speedNum);
-                handler.postDelayed(updateTwo,  speedNumTwo);
-                handler.postDelayed(updateThree,  speedNumThree);
-            }
-        }
 
         speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -127,12 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            public void onSaveInstanceState (Bundle bundle){
-                super.onSaveInstanceState(bundle);
-                bundle.putInt("COUNT", count);
-                bundle.putBoolean("ON", on);
-            }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -145,7 +125,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    public void onPause(){
+        super.onPause();
+        handler.removeCallbacks(updateOne);
+        handler.removeCallbacks(updateTwo);
+        handler.removeCallbacks(updateThree);
+    }
 
+    public void onResume() {
+        super.onResume();
+        if(on){
+            handler.postDelayed(updateOne,  speedNum);
+            handler.postDelayed(updateTwo,  speedNumTwo);
+            handler.postDelayed(updateThree,  speedNumThree);
+        }
+    }
+    public void onSaveInstanceState (Bundle bundle){
+        super.onSaveInstanceState(bundle);
+        bundle.putInt("COUNT", count);
+        bundle.putBoolean("ON", on);
+    }
     public void start(View v){
         handler.postDelayed(updateOne, speedNum);
         handler.postDelayed(updateTwo, speedNumTwo);
