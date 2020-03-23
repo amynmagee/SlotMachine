@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private int speedNum;
     private int speedNumTwo;
     private int speedNumThree;
+    public boolean on;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,15 @@ public class MainActivity extends AppCompatActivity {
         start = findViewById(R.id.start);
         imageViews = new ImageView[3];
         rand = new Random();
-        count = 0;
+        if (savedInstanceState == null){
+            count = 0;
+            on = false;
+        }
+        else{
+            count = savedInstanceState.getInt("COUNT");
+            score.setText(""+count);
+            on = savedInstanceState.getBoolean ("ON");
+        }
         speedNum = 100;
         speedNumTwo = 120;
         speedNumThree = 90;
@@ -66,6 +75,23 @@ public class MainActivity extends AppCompatActivity {
             imageViews[i].setImageDrawable(pear);
             grid.addView(imageViews[i]);
         }
+
+        public void onPause(){
+            super.onPause();
+            handler.removeCallbacks(updateOne);
+            handler.removeCallbacks(updateTwo);
+            handler.removeCallbacks(updateThree);
+        }
+
+        public void onResume() {
+            super.onResume();
+            if(on){
+                handler.postDelayed(updateOne,  speedNum);
+                handler.postDelayed(updateTwo,  speedNumTwo);
+                handler.postDelayed(updateThree,  speedNumThree);
+            }
+        }
+
         speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -99,6 +125,12 @@ public class MainActivity extends AppCompatActivity {
                     speedNumTwo = 120;
                     speedNumThree = 90;
                 }
+            }
+
+            public void onSaveInstanceState (Bundle bundle){
+                super.onSaveInstanceState(bundle);
+                bundle.putInt("COUNT", count);
+                bundle.putBoolean("ON", on);
             }
 
             @Override
